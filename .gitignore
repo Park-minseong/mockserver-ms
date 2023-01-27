@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/macos,windows,git,gradle,intellij,eclipse,java,web
-# Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,git,gradle,intellij,eclipse,java,web
+# Created by https://www.toptal.com/developers/gitignore/api/macos,windows,git,gradle,intellij,eclipse,java
+# Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,git,gradle,intellij,eclipse,java
 
 ### Eclipse ###
 .metadata
@@ -253,21 +253,6 @@ Temporary Items
 # iCloud generated files
 *.icloud
 
-### Web ###
-*.asp
-*.cer
-*.csr
-*.css
-*.htm
-*.html
-*.js
-*.jsp
-*.php
-*.rss
-*.wasm
-*.wat
-*.xhtml
-
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
@@ -321,4 +306,4 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
-# End of https://www.toptal.com/developers/gitignore/api/macos,windows,git,gradle,intellij,eclipse,java,web
+# End of https://www.toptal.com/developers/gitignore/api/macos,windows,git,gradle,intellij,eclipse,java

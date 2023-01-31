@@ -26,6 +26,6 @@ public class AccountBalanceServlet extends HttpServlet {
 
         request.setAttribute("accountBalance", accountBalance);//조회 결과 request에 추가
 
-        request.getRequestDispatcher("").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/balance/showAccountBalance.jsp").forward(request, response);
     }
 }

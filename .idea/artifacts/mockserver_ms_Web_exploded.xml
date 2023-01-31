@@ -2,12 +2,14 @@
   <artifact type="exploded-war" name="mockserver-ms:Web exploded">
     <output-path>$PROJECT_DIR$/out/artifacts/mockserver_ms_Web_exploded</output-path>
     <root id="root">
-      <element id="javaee-facet-resources" facet="mockserver-ms/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="mockserver-ms" />
+          <element id="module-output" name="mockserver-ms.main" />
         </element>
       </element>
+      <element id="javaee-facet-resources" facet="mockserver-ms/web/Web" />
+      <element id="javaee-facet-resources" facet="mockserver-ms.main/web/Web" />
     </root>
   </artifact>
 </component>

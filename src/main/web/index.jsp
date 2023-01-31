@@ -11,6 +11,6 @@
     <title>Title</title>
 </head>
 <body>
-홈
+<a href="balance"><button type="button">잔액조회</button></a>
 </body>
 </html>

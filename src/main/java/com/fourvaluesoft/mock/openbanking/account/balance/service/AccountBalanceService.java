@@ -3,5 +3,5 @@ package com.fourvaluesoft.mock.openbanking.account.balance.service;
 import com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance;
 
 public interface AccountBalanceService {
-    public AccountBalance getBalance();
+    AccountBalance getBalance(String fintechUseNum, String bankTranId, String tranDtime);
 }

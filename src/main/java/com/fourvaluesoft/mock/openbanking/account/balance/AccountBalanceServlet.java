@@ -1,4 +1,4 @@
-package com.fourvaluesoft.mock.openbanking.account.balance.controller;
+package com.fourvaluesoft.mock.openbanking.account.balance;
 
 import com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.AccountBalanceService;

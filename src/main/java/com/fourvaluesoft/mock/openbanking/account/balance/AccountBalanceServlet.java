@@ -18,26 +18,28 @@ public class AccountBalanceServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String fintechUseNum = getStringParameter(request, "fintech_use_num");
-        String bankTranId = getStringParameter(request, "bank_tran_id");
-        String tranDtime = getStringParameter(request, "tran_dtime");
+        String fintechUseNum = getParameterAsString(request, "fintech_use_num");
+        String bankTranId = getParameterAsString(request, "bank_tran_id");
+        String tranDtime = getParameterAsString(request, "tran_dtime");
 
-        AccountBalance accountBalance;
-
-        if (fintechUseNum != null && bankTranId != null && tranDtime != null) {
-            accountBalance = accountBalanceService.getBalance(fintechUseNum, bankTranId, tranDtime);
-        } else if (fintechUseNum == null && bankTranId == null && tranDtime != null) {
-            accountBalance = accountBalanceService.getBalance(tranDtime);
-        } else {
-            accountBalance = new AccountBalance();
-        }
+        AccountBalance accountBalance = getAccountBalanceByParamter(fintechUseNum,bankTranId,tranDtime);
 
         request.setAttribute("accountBalance", accountBalance);
 
         forwardToView(request, response);
     }
 
-    protected String getStringParameter(HttpServletRequest request, String parameterKey) {
+    private AccountBalance getAccountBalanceByParamter(String fintechUseNum, String bankTranId, String tranDtime) {
+        if (fintechUseNum != null && bankTranId != null && tranDtime != null) {
+            return accountBalanceService.getBalance(fintechUseNum, bankTranId, tranDtime);
+        } else if (fintechUseNum == null && bankTranId == null && tranDtime != null) {
+            return accountBalanceService.getBalance(tranDtime);
+        } else {
+            return new AccountBalance();
+        }
+    }
+
+    protected String getParameterAsString(HttpServletRequest request, String parameterKey) {
         String result = request.getParameter(parameterKey);
 
         if (result != null && result.equals(""))
@@ -46,11 +48,13 @@ public class AccountBalanceServlet extends HttpServlet {
         return result;
     }
 
-    protected long getLongParameter(HttpServletRequest request, String parameterKey) throws NumberFormatException {
+    protected long getParameterAsLong(HttpServletRequest request, String parameterKey) throws NumberFormatException {
         return Long.parseLong(request.getParameter(parameterKey));
     }
 
     protected void forwardToView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/pages/balance/showAccountBalance.jsp").forward(request, response);
     }
+
+
 }

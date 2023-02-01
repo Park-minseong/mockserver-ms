@@ -9,7 +9,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
     public AccountBalance getBalance(String tranDtime) {
         AccountBalance accountBalance = new AccountBalance();
 
-        if (tranDtime != null && tranDtime.equals("202202020202")) {
+        if ("202202020202".equals(tranDtime)) {
             accountBalance.setProductName("내맘대로통장");
             accountBalance.setBalanceAmt(100000000);
             accountBalance.setLastTranDate(20220202);

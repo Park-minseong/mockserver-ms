@@ -1,16 +1,17 @@
-<%@ page import="com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <html>
 <head>
-    <title>Balance</title>
+    <title>AccountBalance</title>
     <style>
-        td{
+        table {
+            margin: 0 auto;
+        }
+
+        td {
             border: 1px solid black;
         }
     </style>
 </head>
-
 <body>
 <table>
     <tr>

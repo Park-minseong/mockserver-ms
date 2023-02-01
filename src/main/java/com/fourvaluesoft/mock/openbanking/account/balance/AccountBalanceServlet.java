@@ -13,19 +13,44 @@ import java.io.IOException;
 
 @WebServlet(name = "AccountBalanceServlet", value = "/balance")
 public class AccountBalanceServlet extends HttpServlet {
+
+    private final AccountBalanceService accountBalanceService = new AccountBalanceServiceImpl();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String fintechUseNum = getStringParameter(request, "fintech_use_num");
+        String bankTranId = getStringParameter(request, "bank_tran_id");
+        String tranDtime = getStringParameter(request, "tran_dtime");
 
-        AccountBalanceService accountBalanceService = new AccountBalanceServiceImpl();//AccountBalanceService 객체 생성
+        AccountBalance accountBalance;
 
-        String fintechUseNum = request.getParameter("fintech_use_num");//핀테크 이용번호
-        String bankTranId = request.getParameter("bank_tran_id");//은행거래고유번호
-        String tranDtime = request.getParameter("tran_dtime");//요청일시
+        if (fintechUseNum != null && bankTranId != null && tranDtime != null) {
+            accountBalance = accountBalanceService.getBalance(fintechUseNum, bankTranId, tranDtime);
+        } else if (fintechUseNum == null && bankTranId == null && tranDtime != null) {
+            accountBalance = accountBalanceService.getBalance(tranDtime);
+        } else {
+            accountBalance = new AccountBalance();
+        }
 
-        AccountBalance accountBalance = accountBalanceService.getBalance(fintechUseNum, bankTranId, tranDtime);//핀테크 이용번호, 은행거래고유번호,요청일시으로 잔액 조회 후 AccountBalance객체 반환
+        request.setAttribute("accountBalance", accountBalance);
 
-        request.setAttribute("accountBalance", accountBalance);//조회 결과 request에 추가
+        forwardToView(request, response);
+    }
 
-        request.getRequestDispatcher("/WEB-INF/balance/showAccountBalance.jsp").forward(request, response);
+    protected String getStringParameter(HttpServletRequest request, String parameterKey) {
+        String result = request.getParameter(parameterKey);
+
+        if (result != null && result.equals(""))
+            return null;
+
+        return result;
+    }
+
+    protected long getLongParameter(HttpServletRequest request, String parameterKey) throws NumberFormatException {
+        return Long.parseLong(request.getParameter(parameterKey));
+    }
+
+    protected void forwardToView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/WEB-INF/pages/balance/showAccountBalance.jsp").forward(request, response);
     }
 }

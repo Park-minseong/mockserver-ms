@@ -11,24 +11,29 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AccountBalance {
 
-    private String apiTranId = "AA12349BHZ1324K82AL3";
-    private String apiTranDtm = "20160310101921567";
-    private String rspCode = "A0000";
-    private String rspMessage = "";
-    private String bankTranId = "12345678901234567890";
-    private String bankTranDate = "20160310";
-    private String bankCodeTran = "098";
-    private String bankRspCode = "000";
-    private String bankRspMessage =	"";
-    private String bankName = "오픈뱅킹";
-    private String savingsBankName = "오픈저축은행";
-    private String fintechUseNum = "123456789012345678901234";
-    private String balanceAmt = "1000000";
-    private String availableAmt = "1000000";
-    private String accountType = "1";
-    private String productName = "내맘대로통장";
-    private String accountIssueData = "20190110";
-    private String maturityDate = "20200109";
-    private String lastTranDate = "20191010";
+    private String apiTranId;
+    private long apiTranDtm;
+    private String rspCode;
+    private String rspMessage;
+    private String bankTranId;
+    private int bankTranDate;
+    private String bankCodeTran;
+    private String bankRspCode;
+    private String bankRspMessage;
+    private String bankName;
+    private String savingsBankName;
+    private String fintechUseNum;
+    private int balanceAmt;
+    private int availableAmt;
+    private String accountType;
+    private String productName;
+    private int accountIssueData;
+    private int maturityDate;
+    private int lastTranDate;
 
+    public AccountBalance(int balanceAmt, String productName, int lastTranDate) {
+        this.balanceAmt = balanceAmt;
+        this.productName = productName;
+        this.lastTranDate = lastTranDate;
+    }
 }

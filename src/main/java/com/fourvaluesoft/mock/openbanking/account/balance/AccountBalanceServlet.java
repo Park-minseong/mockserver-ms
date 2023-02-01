@@ -18,34 +18,17 @@ public class AccountBalanceServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String fintechUseNum = getParameterAsString(request, "fintech_use_num");
-        String bankTranId = getParameterAsString(request, "bank_tran_id");
         String tranDtime = getParameterAsString(request, "tran_dtime");
 
-        AccountBalance accountBalance = getAccountBalanceByParamter(fintechUseNum,bankTranId,tranDtime);
+        AccountBalance accountBalance = accountBalanceService.getBalance(tranDtime);
 
         request.setAttribute("accountBalance", accountBalance);
 
         forwardToView(request, response);
     }
 
-    private AccountBalance getAccountBalanceByParamter(String fintechUseNum, String bankTranId, String tranDtime) {
-        if (fintechUseNum != null && bankTranId != null && tranDtime != null) {
-            return accountBalanceService.getBalance(fintechUseNum, bankTranId, tranDtime);
-        } else if (fintechUseNum == null && bankTranId == null && tranDtime != null) {
-            return accountBalanceService.getBalance(tranDtime);
-        } else {
-            return new AccountBalance();
-        }
-    }
-
     protected String getParameterAsString(HttpServletRequest request, String parameterKey) {
-        String result = request.getParameter(parameterKey);
-
-        if (result != null && result.equals(""))
-            return null;
-
-        return result;
+        return request.getParameter(parameterKey);
     }
 
     protected long getParameterAsLong(HttpServletRequest request, String parameterKey) throws NumberFormatException {
@@ -55,6 +38,4 @@ public class AccountBalanceServlet extends HttpServlet {
     protected void forwardToView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/pages/balance/showAccountBalance.jsp").forward(request, response);
     }
-
-
 }

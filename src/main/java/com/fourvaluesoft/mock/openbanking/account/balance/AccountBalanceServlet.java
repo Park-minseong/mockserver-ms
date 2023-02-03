@@ -29,8 +29,7 @@ public class AccountBalanceServlet extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(new Gson().toJson(accountBalance));
     }
-
-
+    
     protected String getParameterAsString(HttpServletRequest request, String parameterKey) {
         return request.getParameter(parameterKey);
     }

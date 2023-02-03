@@ -21,7 +21,7 @@ public class AccountBalanceServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String tranDtime = getParameterAsString(request, "tran_dtime");
 
-        String rootPath = getServletContext().getRealPath("");
+        String rootPath = getServletContext().getRealPath("/");
 
         AccountBalance accountBalance = accountBalanceService.getBalance(tranDtime, rootPath);
 

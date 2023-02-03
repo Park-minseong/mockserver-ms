@@ -92,6 +92,7 @@ local.properties
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/**/misc.xml
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -228,7 +229,8 @@ replay_pid*
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*

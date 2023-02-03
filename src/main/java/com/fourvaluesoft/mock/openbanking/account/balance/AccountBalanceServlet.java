@@ -3,6 +3,7 @@ package com.fourvaluesoft.mock.openbanking.account.balance;
 import com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.AccountBalanceService;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.impl.AccountBalanceServiceImpl;
+import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,12 +21,15 @@ public class AccountBalanceServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String tranDtime = getParameterAsString(request, "tran_dtime");
 
-        AccountBalance accountBalance = accountBalanceService.getBalance(tranDtime);
+        String rootPath = getServletContext().getRealPath("");
 
-        request.setAttribute("accountBalance", accountBalance);
+        AccountBalance accountBalance = accountBalanceService.getBalance(tranDtime, rootPath);
 
-        forwardToView(request, response);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().write(new Gson().toJson(accountBalance));
     }
+
 
     protected String getParameterAsString(HttpServletRequest request, String parameterKey) {
         return request.getParameter(parameterKey);

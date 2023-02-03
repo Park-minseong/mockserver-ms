@@ -1,31 +1,10 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>AccountBalance</title>
-    <style>
-        table {
-            margin: 0 auto;
-        }
+<%@ page import="com.google.gson.Gson"%>
+<%@ page contentType="application/json;charset=UTF-8" language="java" %>
+<%
+Gson gson = new Gson();
+if (request.getAttribute("error") != null)
+     request.getRequestDispatcher("/WEB-INF/pages/public/error.jsp").forward(request, response);
 
-        td {
-            border: 1px solid black;
-        }
-    </style>
-</head>
-<body>
-<table>
-    <tr>
-        <td>상품명</td>
-        <td>${accountBalance.productName}</td>
-    </tr>
-    <tr>
-        <td>계좌잔액</td>
-        <td>${accountBalance.balanceAmt}</td>
-    </tr>
-    <tr>
-        <td>최종거래일</td>
-        <td>${accountBalance.lastTranDate}</td>
-    </tr>
-</table>
-</body>
-</html>
+String accountBalanceJson = gson.toJson(request.getAttribute("accountBalance"));
+out.println(accountBalanceJson);
+%>

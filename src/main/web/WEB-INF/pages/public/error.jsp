@@ -3,5 +3,6 @@
 <%
 Gson gson = new Gson();
 
-out.println(gson.toJson(request.getAttribute("error")));
+String errorJson = gson.toJson(request.getAttribute("error"));
+out.println(errorJson);
 %>

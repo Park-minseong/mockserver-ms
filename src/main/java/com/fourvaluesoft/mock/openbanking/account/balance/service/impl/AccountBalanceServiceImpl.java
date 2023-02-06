@@ -11,10 +11,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 public class AccountBalanceServiceImpl implements AccountBalanceService {
-    private final String ROOT_PATH;
+    private String rootPath;
 
     public AccountBalanceServiceImpl(String rootPath) {
-        this.ROOT_PATH = rootPath;
+        this.rootPath = rootPath;
     }
 
     @Override
@@ -33,6 +33,6 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
     }
 
     private String getDataFilePath(String tranDtime) {
-        return ROOT_PATH + "/WEB-INF/resources/account_balance_" + tranDtime + ".json";
+        return rootPath + "/WEB-INF/resources/account_balance_" + tranDtime + ".json";
     }
 }

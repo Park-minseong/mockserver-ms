@@ -1,6 +1,7 @@
 package com.fourvaluesoft.mock.openbanking.account.balance;
 
 import com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance;
+import com.fourvaluesoft.mock.openbanking.account.balance.domain.ErrorResponse;
 import com.fourvaluesoft.mock.openbanking.account.balance.exception.AccountBalanceNotFoundException;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.AccountBalanceService;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.impl.AccountBalanceServiceImpl;
@@ -11,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Enumeration;
 
 @WebServlet(name = "AccountBalanceServlet", value = "/balance")
 public class AccountBalanceServlet extends HttpServlet {
@@ -28,19 +28,14 @@ public class AccountBalanceServlet extends HttpServlet {
             AccountBalance accountBalance = accountBalanceService.getBalance(tranDtime);
             request.setAttribute("accountBalance", accountBalance);
         } catch (AccountBalanceNotFoundException exception) {
-            request.setAttribute("error", new AccountBalance("A0021", "데이터가 없습니다."));
+            request.setAttribute("error", new ErrorResponse("A0021", "데이터가 없습니다."));
         }
+
         forwardToView(request, response);
     }
 
     protected String getKeyValue(HttpServletRequest request) {
-        Enumeration<String> parameterKeys = request.getParameterNames();
-
-        if (parameterKeys.hasMoreElements()) {
-            return request.getParameter(parameterKeys.nextElement());
-        } else {
-            return null;//A0004 요청전문 포맷 에러
-        }
+        return request.getParameter("tran_dtime");
     }
 
     protected void forwardToView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

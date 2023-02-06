@@ -27,15 +27,4 @@ public class AccountBalance {
     private Integer accountIssueData;
     private Integer maturityDate;
     private Integer lastTranDate;
-
-    public AccountBalance(int balanceAmt, String productName, int lastTranDate) {
-        this.balanceAmt = balanceAmt;
-        this.productName = productName;
-        this.lastTranDate = lastTranDate;
-    }
-
-    public AccountBalance(String rspCode, String rspMessage) {
-        this.rspCode = rspCode;
-        this.rspMessage = rspMessage;
-    }
 }

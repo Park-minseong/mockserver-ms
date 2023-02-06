@@ -1,0 +1,20 @@
+{
+    "apiTranId": "2sfd133a-d37b-431d-a6g4",
+    "apiTranDtm": "20220910131921222",
+    "rspCode": "A0000",
+    "rspMessage": "",
+    "bankTranId": "F123456789U4BC34239Z",
+    "bankTranDate": "20190910",
+    "bankCodeTran": "097",
+    "bankRspCode": "000",
+    "bankRspMessage": "",
+    "bankName": "오픈은행",
+    "fintechUseNum": "123456789012345678901234",
+    "balanceAmt": "35000000",
+    "availableAmt": "35000000",
+    "accountType": "2",
+    "productName": "내맘대로통장",
+    "accountIssueDate": "20190110",
+    "maturityDate": "20200109",
+    "lastTranDate": "20191010"
+}

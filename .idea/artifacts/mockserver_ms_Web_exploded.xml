@@ -7,6 +7,9 @@
           <element id="module-output" name="mockserver-ms" />
           <element id="module-output" name="mockserver-ms.main" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Gradle: com.google.code.gson:gson:2.10.1" />
+        </element>
       </element>
       <element id="javaee-facet-resources" facet="mockserver-ms/web/Web" />
       <element id="javaee-facet-resources" facet="mockserver-ms.main/web/Web" />

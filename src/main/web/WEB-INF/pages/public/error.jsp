@@ -3,6 +3,6 @@
 <%
 Gson gson = new Gson();
 
-String accountBalanceJson = gson.toJson(request.getAttribute("accountBalance"));
-out.println(accountBalanceJson);
+String errorJson = gson.toJson(request.getAttribute("error"));
+out.println(errorJson);
 %>

@@ -48,6 +48,6 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
     }
 
     private String getDataFilePath(String tranDtime) {
-        return rootPath + "/WEB-INF/resources/account_balance_" + tranDtime + ".json";
+        return rootPath + "/WEB-INF/balance/resources/account_balance_" + tranDtime + ".json";
     }
 }

@@ -1,9 +1,11 @@
 package com.fourvaluesoft.mock.openbanking.account.balance.service.impl;
 
 import com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance;
-import com.fourvaluesoft.mock.openbanking.account.balance.exception.AccountBalanceNotFoundException;
+import com.fourvaluesoft.mock.openbanking.account.balance.exception.AccountNotFoundException;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.AccountBalanceService;
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,6 +13,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 public class AccountBalanceServiceImpl implements AccountBalanceService {
+
     private String rootPath;
 
     public AccountBalanceServiceImpl(String rootPath) {
@@ -18,18 +21,30 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
     }
 
     @Override
-    public AccountBalance getBalance(String tranDtime) throws AccountBalanceNotFoundException {
+    public AccountBalance getBalance(String tranDtime) throws AccountNotFoundException {
         String dataFilePath = getDataFilePath(tranDtime);
 
         try {
-            Gson gson = new Gson();
-
-            InputStreamReader AccountBalanceReader = new InputStreamReader(new FileInputStream(dataFilePath), StandardCharsets.UTF_8);
-
-            return gson.fromJson(AccountBalanceReader, AccountBalance.class);
-        } catch (FileNotFoundException exception) {
-            throw new AccountBalanceNotFoundException(dataFilePath + "를 찾지 못했습니다.");
+            return loadAccountBalanceFromFile(dataFilePath);
+        } catch (JsonIOException ex) {
+            throw createAccountNotFoundException(tranDtime);
+        } catch (JsonSyntaxException ex) {
+            throw createAccountNotFoundException(tranDtime);
+        } catch (FileNotFoundException ex) {
+            throw createAccountNotFoundException(tranDtime);
         }
+    }
+
+    private AccountBalance loadAccountBalanceFromFile(String dataFilePath) throws FileNotFoundException {
+        Gson gson = new Gson();
+
+        InputStreamReader reader = new InputStreamReader(new FileInputStream(dataFilePath), StandardCharsets.UTF_8);
+
+        return gson.fromJson(reader, AccountBalance.class);
+    }
+
+    private AccountNotFoundException createAccountNotFoundException(String tranDtime) {
+        return new AccountNotFoundException("Invalid tranDtime: " + tranDtime);
     }
 
     private String getDataFilePath(String tranDtime) {

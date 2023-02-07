@@ -1,7 +1,7 @@
 package com.fourvaluesoft.mock.openbanking.account.balance.service.impl;
 
 import com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance;
-import com.fourvaluesoft.mock.openbanking.account.balance.exception.AccountNotFoundException;
+import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.AccountBalanceService;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -43,11 +43,11 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
         return gson.fromJson(reader, AccountBalance.class);
     }
 
-    private AccountNotFoundException createAccountNotFoundException(String tranDtime) {
-        return new AccountNotFoundException("Invalid tranDtime: " + tranDtime);
-    }
-
     private String getDataFilePath(String tranDtime) {
         return rootPath + "/WEB-INF/balance/resources/account_balance_" + tranDtime + ".json";
+    }
+
+    private AccountNotFoundException createAccountNotFoundException(String tranDtime) {
+        return new AccountNotFoundException("Invalid tranDtime: " + tranDtime);
     }
 }

@@ -1,13 +1,12 @@
 package com.fourvaluesoft.mock.openbanking.account.realname;
 
-import com.fourvaluesoft.mock.openbanking.account.balance.domain.ErrorResponse;
+import com.fourvaluesoft.mock.openbanking.account.common.ErrorResponse;
+import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
+import com.fourvaluesoft.mock.openbanking.account.exception.BadRequestException;
 import com.fourvaluesoft.mock.openbanking.account.realname.domain.AccountRealName;
 import com.fourvaluesoft.mock.openbanking.account.realname.service.AccountRealNameService;
 import com.fourvaluesoft.mock.openbanking.account.realname.service.impl.AccountRealNameServiceImpl;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 @WebServlet(name = "AccountRealNameServlet", value = "/account/realname")
 public class AccountRealNameServlet extends HttpServlet {
 
-    AccountRealNameService accountRealNameService;
+    private AccountRealNameService accountRealNameService;
 
     @Override
     public void init() throws ServletException {
@@ -30,29 +29,30 @@ public class AccountRealNameServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        JsonObject bodyJson = getJsonFromBody(request);
-        String accountNum = bodyJson.get("account_num").getAsString();
-
         try {
+            String accountNum = getKeyValueFromBody(request);
             AccountRealName accountRealName = accountRealNameService.getRealName(accountNum);
             request.setAttribute("accountRealName", accountRealName);
-            System.out.println(accountRealName.getBankName());
 
             forwardToView(request, response);
-        } catch (Exception exception) {
+        } catch (AccountNotFoundException ex) {
             request.setAttribute("error", createErrorResponse("A0021", "데이터가 없습니다."));
+
+            forwardToError(request, response);
+        } catch (BadRequestException ex) {
+            request.setAttribute("error", createErrorResponse("A0003", "요청전문 포맷 에러"));
 
             forwardToError(request, response);
         }
     }
 
-    private JsonObject getJsonFromBody(HttpServletRequest request) throws IOException {
+    private String getKeyValueFromBody(HttpServletRequest request) throws IOException, BadRequestException {
         try (InputStreamReader reader = new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8)) {
-            return new Gson().fromJson(reader, JsonObject.class);
-        } catch (JsonSyntaxException ex) {
-            throw new JsonSyntaxException("");
-        } catch (JsonParseException ex) {
-            throw new JsonParseException("");
+            JsonElement accountNumJson = new Gson().fromJson(reader, JsonObject.class).get("account_num");
+
+            return accountNumJson.getAsString();
+        } catch (NullPointerException | JsonSyntaxException ex) {
+            throw createBadRequestException("");
         }
     }
 
@@ -62,6 +62,10 @@ public class AccountRealNameServlet extends HttpServlet {
 
     private void forwardToError(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/public/pages/error.jsp").forward(request, response);
+    }
+
+    private BadRequestException createBadRequestException(String message) {
+        return new BadRequestException("Invalid Request Body: " + message);
     }
 
     private ErrorResponse createErrorResponse(String rspCode, String rspMessage) {

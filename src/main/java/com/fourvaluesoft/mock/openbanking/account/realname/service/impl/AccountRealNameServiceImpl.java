@@ -1,6 +1,6 @@
 package com.fourvaluesoft.mock.openbanking.account.realname.service.impl;
 
-import com.fourvaluesoft.mock.openbanking.account.balance.exception.AccountNotFoundException;
+import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
 import com.fourvaluesoft.mock.openbanking.account.realname.domain.AccountRealName;
 import com.fourvaluesoft.mock.openbanking.account.realname.service.AccountRealNameService;
 import com.google.gson.*;

@@ -1,8 +1,8 @@
 package com.fourvaluesoft.mock.openbanking.account.balance;
 
 import com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance;
-import com.fourvaluesoft.mock.openbanking.account.balance.domain.ErrorResponse;
-import com.fourvaluesoft.mock.openbanking.account.balance.exception.AccountNotFoundException;
+import com.fourvaluesoft.mock.openbanking.account.common.ErrorResponse;
+import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.AccountBalanceService;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.impl.AccountBalanceServiceImpl;
 

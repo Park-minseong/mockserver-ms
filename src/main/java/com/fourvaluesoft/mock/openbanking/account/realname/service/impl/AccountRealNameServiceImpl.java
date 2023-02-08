@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 public class AccountRealNameServiceImpl implements AccountRealNameService {
 
     private String rootPath;
+    private final String RESOURCES_PATH = "/WEB-INF/resources/realName/";
 
     public AccountRealNameServiceImpl(String rootPath) {
         this.rootPath = rootPath;
@@ -38,7 +39,7 @@ public class AccountRealNameServiceImpl implements AccountRealNameService {
     }
 
     private String getDataFilePath(String accountNum) {
-        return rootPath + "/WEB-INF/realName/resources/account_real_name_" + accountNum + ".json";
+        return rootPath + RESOURCES_PATH + "account_real_name_" + accountNum + ".json";
     }
 
     private AccountNotFoundException createAccountNotFoundException(String accountNum) {

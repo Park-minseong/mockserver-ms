@@ -16,6 +16,8 @@ import java.io.IOException;
 @WebServlet(name = "AccountBalanceServlet", value = "/account/balance")
 public class AccountBalanceServlet extends HttpServlet {
 
+    private final String PAGES_PATH = "/WEB-INF/pages/";
+
     private AccountBalanceService accountBalanceService;
 
     @Override
@@ -44,11 +46,11 @@ public class AccountBalanceServlet extends HttpServlet {
     }
 
     private void forwardToView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/balance/pages/showAccountBalance.jsp").forward(request, response);
+        request.getRequestDispatcher(PAGES_PATH + "balance/showAccountBalance.jsp").forward(request, response);
     }
 
     private void forwardToError(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/public/pages/error.jsp").forward(request, response);
+        request.getRequestDispatcher(PAGES_PATH + "common/error.jsp").forward(request, response);
     }
 
     private ErrorResponse createErrorResponse(String rspCode, String rspMessage) {

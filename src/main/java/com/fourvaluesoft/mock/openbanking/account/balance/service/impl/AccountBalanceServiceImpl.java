@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 public class AccountBalanceServiceImpl implements AccountBalanceService {
 
     private String rootPath;
+    private final String RESOURCES_PATH = "/WEB-INF/resources/balance/";
 
     public AccountBalanceServiceImpl(String rootPath) {
         this.rootPath = rootPath;
@@ -26,11 +27,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
 
         try {
             return loadAccountBalanceFromFile(dataFilePath);
-        } catch (JsonIOException ex) {
-            throw createAccountNotFoundException(tranDtime);
-        } catch (JsonSyntaxException ex) {
-            throw createAccountNotFoundException(tranDtime);
-        } catch (FileNotFoundException ex) {
+        } catch (JsonIOException | JsonSyntaxException | FileNotFoundException ex) {
             throw createAccountNotFoundException(tranDtime);
         }
     }
@@ -44,7 +41,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
     }
 
     private String getDataFilePath(String tranDtime) {
-        return rootPath + "/WEB-INF/balance/resources/account_balance_" + tranDtime + ".json";
+        return rootPath + RESOURCES_PATH + "account_balance_" + tranDtime + ".json";
     }
 
     private AccountNotFoundException createAccountNotFoundException(String tranDtime) {

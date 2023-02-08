@@ -20,6 +20,8 @@ import java.nio.charset.StandardCharsets;
 @WebServlet(name = "AccountRealNameServlet", value = "/account/realname")
 public class AccountRealNameServlet extends HttpServlet {
 
+    private final String PAGES_PATH = "/WEB-INF/pages/";
+
     private AccountRealNameService accountRealNameService;
 
     @Override
@@ -52,20 +54,20 @@ public class AccountRealNameServlet extends HttpServlet {
 
             return accountNumJson.getAsString();
         } catch (NullPointerException | JsonSyntaxException ex) {
-            throw createBadRequestException("");
+            throw createBadRequestException();
         }
     }
 
     private void forwardToView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/realName/pages/showAccountRealName.jsp").forward(request, response);
+        request.getRequestDispatcher(PAGES_PATH + "realName/showAccountRealName.jsp").forward(request, response);
     }
 
     private void forwardToError(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/public/pages/error.jsp").forward(request, response);
+        request.getRequestDispatcher(PAGES_PATH + "common/error.jsp").forward(request, response);
     }
 
-    private BadRequestException createBadRequestException(String message) {
-        return new BadRequestException("Invalid Request Body: " + message);
+    private BadRequestException createBadRequestException() {
+        return new BadRequestException("Invalid Request Body");
     }
 
     private ErrorResponse createErrorResponse(String rspCode, String rspMessage) {

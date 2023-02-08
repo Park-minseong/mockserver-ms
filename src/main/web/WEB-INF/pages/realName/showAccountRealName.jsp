@@ -5,4 +5,4 @@
 <%
 Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
 %>
-<%=gson.toJson(request.getAttribute("accountBalance"))%>
+<%=gson.toJson(request.getAttribute("accountRealName"))%>

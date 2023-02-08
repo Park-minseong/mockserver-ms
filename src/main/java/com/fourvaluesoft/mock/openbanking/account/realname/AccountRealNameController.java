@@ -1,53 +1,54 @@
 package com.fourvaluesoft.mock.openbanking.account.realname;
 
-import com.fourvaluesoft.mock.openbanking.common.ErrorResponse;
 import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
 import com.fourvaluesoft.mock.openbanking.account.exception.BadRequestException;
 import com.fourvaluesoft.mock.openbanking.account.realname.domain.AccountRealName;
 import com.fourvaluesoft.mock.openbanking.account.realname.service.AccountRealNameService;
 import com.fourvaluesoft.mock.openbanking.account.realname.service.impl.AccountRealNameServiceImpl;
-import com.google.gson.*;
+import com.fourvaluesoft.mock.openbanking.controller.Controller;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-@WebServlet(name = "AccountRealNameServlet", value = "/account/realname")
-public class AccountRealNameServlet extends HttpServlet {
+public class AccountRealNameController extends Controller {
 
-    private static final String PAGES_PATH = "/WEB-INF/pages/";
+    private final AccountRealNameService realNameService;
 
-    private AccountRealNameService accountRealNameService;
-
-    @Override
-    public void init() throws ServletException {
-        accountRealNameService = new AccountRealNameServiceImpl(getServletContext().getRealPath("/"));
+    public AccountRealNameController(String webResourcesPath) throws ServletException {
+        realNameService = new AccountRealNameServiceImpl(webResourcesPath);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String accountNum = getKeyValueFromBody(request);
 
-            AccountRealName accountRealName = accountRealNameService.getRealName(accountNum);
+            AccountRealName accountRealName = realNameService.getRealName(accountNum);
 
             request.setAttribute("accountRealName", accountRealName);
 
-            forwardToView(request, response);
+            return getSucceedViewPath();
         } catch (AccountNotFoundException ex) {
             request.setAttribute("error", createErrorResponse("A0021", "데이터가 없음"));
 
-            forwardToError(request, response);
+            return getErrorViewPath();
         } catch (BadRequestException ex) {
             request.setAttribute("error", createErrorResponse("A0003", "요청전문 포맷 에러"));
 
-            forwardToError(request, response);
+            return getErrorViewPath();
         }
+    }
+
+    @Override
+    public String getMethod() {
+        return "POST";
     }
 
     private String getKeyValueFromBody(HttpServletRequest request) throws IOException, BadRequestException {
@@ -60,19 +61,8 @@ public class AccountRealNameServlet extends HttpServlet {
         }
     }
 
-    private void forwardToView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher(PAGES_PATH + "realName/showAccountRealName.jsp").forward(request, response);
-    }
-
-    private void forwardToError(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher(PAGES_PATH + "common/error.jsp").forward(request, response);
-    }
-
-    private BadRequestException createBadRequestException(String message) {
-        return new BadRequestException(message);
-    }
-
-    private ErrorResponse createErrorResponse(String rspCode, String rspMessage) {
-        return new ErrorResponse(rspCode, rspMessage);
+    @Override
+    protected String getSucceedViewPath() {
+        return "realName/showAccountRealName.jsp";
     }
 }

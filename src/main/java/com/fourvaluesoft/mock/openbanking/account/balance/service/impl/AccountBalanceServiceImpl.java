@@ -15,12 +15,12 @@ import java.nio.file.Paths;
 
 public class AccountBalanceServiceImpl implements AccountBalanceService {
 
-    private static final String RESOURCES_PATH = "/WEB-INF/resources/balance/";
+    private static final String DATA_PATH = "/WEB-INF/data/account/balance/";
 
-    private String rootPath;
+    private String webResourcesPath;
 
-    public AccountBalanceServiceImpl(String rootPath) {
-        this.rootPath = rootPath;
+    public AccountBalanceServiceImpl(String webResourcesPath) {
+        this.webResourcesPath = webResourcesPath;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
     }
 
     private String getDataFilePath(String tranDtime) {
-        return rootPath + RESOURCES_PATH + "account_balance_" + tranDtime + ".json";
+        return webResourcesPath + DATA_PATH + tranDtime + ".json";
     }
 
     private AccountNotFoundException createAccountNotFoundException(String tranDtime) {

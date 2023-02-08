@@ -1,4 +1,4 @@
-package com.fourvaluesoft.mock.openbanking.account.balance.exception;
+package com.fourvaluesoft.mock.openbanking.account.exception;
 
 public class AccountNotFoundException extends Exception {
 

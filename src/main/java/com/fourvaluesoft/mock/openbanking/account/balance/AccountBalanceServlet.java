@@ -1,8 +1,8 @@
 package com.fourvaluesoft.mock.openbanking.account.balance;
 
 import com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance;
-import com.fourvaluesoft.mock.openbanking.account.balance.domain.ErrorResponse;
-import com.fourvaluesoft.mock.openbanking.account.balance.exception.AccountNotFoundException;
+import com.fourvaluesoft.mock.openbanking.common.ErrorResponse;
+import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.AccountBalanceService;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.impl.AccountBalanceServiceImpl;
 
@@ -13,8 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "AccountBalanceServlet", value = "/balance")
+@WebServlet(name = "AccountBalanceServlet", value = "/account/balance")
 public class AccountBalanceServlet extends HttpServlet {
+
+    private final String PAGES_PATH = "/WEB-INF/pages/";
 
     private AccountBalanceService accountBalanceService;
 
@@ -33,7 +35,7 @@ public class AccountBalanceServlet extends HttpServlet {
 
             forwardToView(request, response);
         } catch (AccountNotFoundException exception) {
-            request.setAttribute("error", createErrorResponse("A0021", "데이터가 없습니다."));
+            request.setAttribute("error", createErrorResponse("A0021", "데이터가 없음"));
 
             forwardToError(request, response);
         }
@@ -44,11 +46,11 @@ public class AccountBalanceServlet extends HttpServlet {
     }
 
     private void forwardToView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/pages/balance/showAccountBalance.jsp").forward(request, response);
+        request.getRequestDispatcher(PAGES_PATH + "balance/showAccountBalance.jsp").forward(request, response);
     }
 
     private void forwardToError(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/pages/public/error.jsp").forward(request, response);
+        request.getRequestDispatcher(PAGES_PATH + "common/error.jsp").forward(request, response);
     }
 
     private ErrorResponse createErrorResponse(String rspCode, String rspMessage) {

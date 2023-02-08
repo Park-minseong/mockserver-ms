@@ -22,18 +22,20 @@ public class AccountRealNameServlet extends HttpServlet {
 
     private final String PAGES_PATH = "/WEB-INF/pages/";
 
-    private AccountRealNameService accountRealNameService;
+    private AccountRealNameService realNameService;
 
     @Override
     public void init() throws ServletException {
-        accountRealNameService = new AccountRealNameServiceImpl(getServletContext().getRealPath("/"));
+        realNameService = new AccountRealNameServiceImpl(getServletContext().getRealPath("/"));
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String accountNum = getKeyValueFromBody(request);
-            AccountRealName accountRealName = accountRealNameService.getRealName(accountNum);
+
+            AccountRealName accountRealName = realNameService.getRealName(accountNum);
+
             request.setAttribute("accountRealName", accountRealName);
 
             forwardToView(request, response);

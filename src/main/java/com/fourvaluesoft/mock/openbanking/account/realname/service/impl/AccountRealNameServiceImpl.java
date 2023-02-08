@@ -7,6 +7,7 @@ import com.google.gson.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
@@ -31,11 +32,13 @@ public class AccountRealNameServiceImpl implements AccountRealNameService {
     }
 
     private AccountRealName loadAccountRealNameFromFile(String dataFilePath) throws FileNotFoundException {
-        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
+        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(dataFilePath), StandardCharsets.UTF_8)) {
+            Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
 
-        InputStreamReader reader = new InputStreamReader(new FileInputStream(dataFilePath), StandardCharsets.UTF_8);
-
-        return gson.fromJson(reader, AccountRealName.class);
+            return gson.fromJson(reader, AccountRealName.class);
+        } catch (IOException ex) {
+            throw new FileNotFoundException();
+        }
     }
 
     private String getDataFilePath(String accountNum) {

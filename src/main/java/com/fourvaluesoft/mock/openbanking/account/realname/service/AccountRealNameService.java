@@ -5,5 +5,5 @@ import com.fourvaluesoft.mock.openbanking.account.realname.domain.AccountRealNam
 
 public interface AccountRealNameService {
 
-    AccountRealName getRealName(String accountNumJson) throws AccountNotFoundException;
+    AccountRealName getRealName(String accountNum) throws AccountNotFoundException;
 }

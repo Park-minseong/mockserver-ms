@@ -1,6 +1,6 @@
 package com.fourvaluesoft.mock.openbanking.account.realname;
 
-import com.fourvaluesoft.mock.openbanking.account.common.ErrorResponse;
+import com.fourvaluesoft.mock.openbanking.common.ErrorResponse;
 import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
 import com.fourvaluesoft.mock.openbanking.account.exception.BadRequestException;
 import com.fourvaluesoft.mock.openbanking.account.realname.domain.AccountRealName;
@@ -20,13 +20,13 @@ import java.nio.charset.StandardCharsets;
 @WebServlet(name = "AccountRealNameServlet", value = "/account/realname")
 public class AccountRealNameServlet extends HttpServlet {
 
-    private final String PAGES_PATH = "/WEB-INF/pages/";
+    private static final String PAGES_PATH = "/WEB-INF/pages/";
 
-    private AccountRealNameService realNameService;
+    private AccountRealNameService accountRealNameService;
 
     @Override
     public void init() throws ServletException {
-        realNameService = new AccountRealNameServiceImpl(getServletContext().getRealPath("/"));
+        accountRealNameService = new AccountRealNameServiceImpl(getServletContext().getRealPath("/"));
     }
 
     @Override
@@ -34,13 +34,13 @@ public class AccountRealNameServlet extends HttpServlet {
         try {
             String accountNum = getKeyValueFromBody(request);
 
-            AccountRealName accountRealName = realNameService.getRealName(accountNum);
+            AccountRealName accountRealName = accountRealNameService.getRealName(accountNum);
 
             request.setAttribute("accountRealName", accountRealName);
 
             forwardToView(request, response);
         } catch (AccountNotFoundException ex) {
-            request.setAttribute("error", createErrorResponse("A0021", "데이터가 없습니다."));
+            request.setAttribute("error", createErrorResponse("A0021", "데이터가 없음"));
 
             forwardToError(request, response);
         } catch (BadRequestException ex) {
@@ -53,10 +53,10 @@ public class AccountRealNameServlet extends HttpServlet {
     private String getKeyValueFromBody(HttpServletRequest request) throws IOException, BadRequestException {
         try (InputStreamReader reader = new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8)) {
             JsonElement accountNumJson = new Gson().fromJson(reader, JsonObject.class).get("account_num");
-
+            
             return accountNumJson.getAsString();
         } catch (NullPointerException | JsonSyntaxException ex) {
-            throw createBadRequestException();
+            throw createBadRequestException("Invalid request body");
         }
     }
 
@@ -68,8 +68,8 @@ public class AccountRealNameServlet extends HttpServlet {
         request.getRequestDispatcher(PAGES_PATH + "common/error.jsp").forward(request, response);
     }
 
-    private BadRequestException createBadRequestException() {
-        return new BadRequestException("Invalid Request Body");
+    private BadRequestException createBadRequestException(String message) {
+        return new BadRequestException(message);
     }
 
     private ErrorResponse createErrorResponse(String rspCode, String rspMessage) {

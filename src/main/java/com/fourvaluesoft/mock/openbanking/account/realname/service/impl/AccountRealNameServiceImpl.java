@@ -5,16 +5,17 @@ import com.fourvaluesoft.mock.openbanking.account.realname.domain.AccountRealNam
 import com.fourvaluesoft.mock.openbanking.account.realname.service.AccountRealNameService;
 import com.google.gson.*;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class AccountRealNameServiceImpl implements AccountRealNameService {
 
+    private static final String RESOURCES_PATH = "/WEB-INF/resources/realName/";
+
     private String rootPath;
-    private final String RESOURCES_PATH = "/WEB-INF/resources/realName/";
 
     public AccountRealNameServiceImpl(String rootPath) {
         this.rootPath = rootPath;
@@ -25,19 +26,17 @@ public class AccountRealNameServiceImpl implements AccountRealNameService {
         String dataFilePath = getDataFilePath(accountNum);
 
         try {
-            return loadAccountRealNameFromFile(dataFilePath);
-        } catch (JsonIOException | JsonSyntaxException | FileNotFoundException ex) {
+            return loadFromFile(dataFilePath);
+        } catch (IOException | JsonIOException | JsonSyntaxException ex) {
             throw createAccountNotFoundException(accountNum);
         }
     }
 
-    private AccountRealName loadAccountRealNameFromFile(String dataFilePath) throws FileNotFoundException {
-        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(dataFilePath), StandardCharsets.UTF_8)) {
+    private AccountRealName loadFromFile(String dataFilePath) throws IOException {
+        try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(Paths.get(dataFilePath)), StandardCharsets.UTF_8)) {
             Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
 
             return gson.fromJson(reader, AccountRealName.class);
-        } catch (IOException ex) {
-            throw new FileNotFoundException();
         }
     }
 

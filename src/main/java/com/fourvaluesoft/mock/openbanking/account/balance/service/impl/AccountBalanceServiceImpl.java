@@ -1,21 +1,23 @@
 package com.fourvaluesoft.mock.openbanking.account.balance.service.impl;
 
 import com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance;
-import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.AccountBalanceService;
+import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class AccountBalanceServiceImpl implements AccountBalanceService {
 
+    private static final String RESOURCES_PATH = "/WEB-INF/resources/balance/";
+
     private String rootPath;
-    private final String RESOURCES_PATH = "/WEB-INF/resources/balance/";
 
     public AccountBalanceServiceImpl(String rootPath) {
         this.rootPath = rootPath;
@@ -26,18 +28,18 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
         String dataFilePath = getDataFilePath(tranDtime);
 
         try {
-            return loadAccountBalanceFromFile(dataFilePath);
-        } catch (JsonIOException | JsonSyntaxException | FileNotFoundException ex) {
+            return loadFromFile(dataFilePath);
+        } catch (IOException | JsonIOException | JsonSyntaxException ex) {
             throw createAccountNotFoundException(tranDtime);
         }
     }
 
-    private AccountBalance loadAccountBalanceFromFile(String dataFilePath) throws FileNotFoundException {
-        Gson gson = new Gson();
+    private AccountBalance loadFromFile(String dataFilePath) throws IOException {
+        try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(Paths.get(dataFilePath)), StandardCharsets.UTF_8)) {
+            Gson gson = new Gson();
 
-        InputStreamReader reader = new InputStreamReader(new FileInputStream(dataFilePath), StandardCharsets.UTF_8);
-
-        return gson.fromJson(reader, AccountBalance.class);
+            return gson.fromJson(reader, AccountBalance.class);
+        }
     }
 
     private String getDataFilePath(String tranDtime) {

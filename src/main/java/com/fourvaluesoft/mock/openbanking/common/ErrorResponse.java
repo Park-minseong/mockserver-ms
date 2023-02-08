@@ -1,4 +1,4 @@
-package com.fourvaluesoft.mock.openbanking.account.common;
+package com.fourvaluesoft.mock.openbanking.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

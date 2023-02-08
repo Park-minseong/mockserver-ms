@@ -1,7 +1,7 @@
 package com.fourvaluesoft.mock.openbanking.account.balance;
 
 import com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance;
-import com.fourvaluesoft.mock.openbanking.account.common.ErrorResponse;
+import com.fourvaluesoft.mock.openbanking.common.ErrorResponse;
 import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.AccountBalanceService;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.impl.AccountBalanceServiceImpl;
@@ -35,7 +35,7 @@ public class AccountBalanceServlet extends HttpServlet {
 
             forwardToView(request, response);
         } catch (AccountNotFoundException exception) {
-            request.setAttribute("error", createErrorResponse("A0021", "데이터가 없습니다."));
+            request.setAttribute("error", createErrorResponse("A0021", "데이터가 없음"));
 
             forwardToError(request, response);
         }

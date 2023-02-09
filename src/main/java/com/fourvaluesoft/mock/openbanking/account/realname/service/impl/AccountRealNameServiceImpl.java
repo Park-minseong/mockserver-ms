@@ -13,12 +13,12 @@ import java.nio.file.Paths;
 
 public class AccountRealNameServiceImpl implements AccountRealNameService {
 
-    private static final String RESOURCES_PATH = "/WEB-INF/resources/realName/";
+    private static final String DATA_PATH = "/WEB-INF/data/inquiry/realName/";
 
-    private String rootPath;
+    private final String webResourcesPath;
 
-    public AccountRealNameServiceImpl(String rootPath) {
-        this.rootPath = rootPath;
+    public AccountRealNameServiceImpl(String webResourcesPath) {
+        this.webResourcesPath = webResourcesPath;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class AccountRealNameServiceImpl implements AccountRealNameService {
     }
 
     private String getDataFilePath(String accountNum) {
-        return rootPath + RESOURCES_PATH + "account_real_name_" + accountNum + ".json";
+        return webResourcesPath + DATA_PATH + accountNum + ".json";
     }
 
     private AccountNotFoundException createAccountNotFoundException(String accountNum) {

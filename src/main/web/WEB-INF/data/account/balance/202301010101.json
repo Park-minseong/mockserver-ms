@@ -1,0 +1,20 @@
+{
+    "api_tran_id": "2sfd528a-d37b-248d-a6g4",
+    "api_tran_dtm": "20221025131921222",
+    "rsp_code": "A0000",
+    "rsp_message": "",
+    "bank_tran_id": "F123456789U4BC34239Z",
+    "bank_tran_date": "20220217",
+    "bank_code_tran": "097",
+    "bank_rsp_code": "000",
+    "bank_rsp_message": "",
+    "bank_name": "오픈은행",
+    "fintech_use_num": "121556789012345678904567",
+    "balance_amt": "35000000",
+    "available_amt": "35000000",
+    "account_type": "2",
+    "product_name": "내맘대로통장",
+    "account_issue_date": "20221011",
+    "maturity_date": "20231010",
+    "last_tran_date": "20221225"
+}

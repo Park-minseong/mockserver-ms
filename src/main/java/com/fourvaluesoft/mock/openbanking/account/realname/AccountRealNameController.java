@@ -36,7 +36,7 @@ public class AccountRealNameController extends Controller {
 
             return getSucceedViewPath();
         } catch (AccountNotFoundException ex) {
-            request.setAttribute("error", createErrorResponse("A0021", "데이터가 없음"));
+            request.setAttribute("error", createErrorResponse("A0021", "데이터 없음"));
 
             return getErrorViewPath();
         } catch (BadRequestException ex) {

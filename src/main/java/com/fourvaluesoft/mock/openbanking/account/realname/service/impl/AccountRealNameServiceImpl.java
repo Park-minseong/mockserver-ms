@@ -15,7 +15,7 @@ public class AccountRealNameServiceImpl implements AccountRealNameService {
 
     private static final String DATA_PATH = "/WEB-INF/data/inquiry/realName/";
 
-    private String webResourcesPath;
+    private final String webResourcesPath;
 
     public AccountRealNameServiceImpl(String webResourcesPath) {
         this.webResourcesPath = webResourcesPath;

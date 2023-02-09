@@ -21,6 +21,10 @@ public class DispatcherServlet extends HttpServlet {
 
     private final Map<String, Controller> controllerMap = new HashMap<String, Controller>();
 
+    private Controller controller;
+
+    private String resultView;
+
     @Override
     public void init() throws ServletException {
         String webResourcesPath = getServletContext().getRealPath("/");
@@ -30,29 +34,51 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Controller controller = controllerMap.get(request.getServletPath());
-
-        String resultView;
+        controller = controllerMap.get(request.getServletPath());
 
         if (controller == null) {
-            resultView = getErrorViewPath(request, "O0007", "API를 요청 또는 처리할 수 없습니다. (API 업무처리 Routing 실패 시)");
-        } else if (!controller.getMethod().equals(request.getMethod())) {
+            resultView = getErrorViewPath(request, "O0007",
+                    "API를 요청 또는 처리할 수 없습니다. (API 업무처리 Routing 실패 시)");
+
+            forwardToView(request, response);
+        } else if (controller.getMethod().equals("GET")) {
+            doGet(request, response);
+        } else if (controller.getMethod().equals("POST")){
+            doPost(request,response);
+        } else {
+            resultView = getErrorViewPath(request, "O0010", "허용되지 않은 HTTP Method 입니다.");
+
+            forwardToView(request, response);
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (!controller.getMethod().equals(request.getMethod())) {
             resultView = getErrorViewPath(request, "O0010", "허용되지 않은 HTTP Method 입니다.");
         } else {
             resultView = controller.processRequest(request, response);
         }
+        forwardToView(request, response);
+    }
 
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (!controller.getMethod().equals(request.getMethod())) {
+            resultView = getErrorViewPath(request, "O0010", "허용되지 않은 HTTP Method 입니다.");
+        } else {
+            resultView = controller.processRequest(request, response);
+        }
+        forwardToView(request, response);
+    }
+
+    private void forwardToView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher(VIEWS_PATH + resultView).forward(request, response);
     }
 
     private String getErrorViewPath(HttpServletRequest request, String rspCode, String rspMessage) {
-        request.setAttribute("error", createErrorResponse(rspCode, rspMessage));
+        request.setAttribute("error", new ErrorResponse(rspCode, rspMessage));
 
         return "common/error.jsp";
     }
-
-    private ErrorResponse createErrorResponse(String rspCode, String rspMessage) {
-        return new ErrorResponse(rspCode, rspMessage);
-    }
 }
-

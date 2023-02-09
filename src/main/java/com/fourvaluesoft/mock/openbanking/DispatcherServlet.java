@@ -28,6 +28,7 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         String webResourcesPath = getServletContext().getRealPath("/");
+
         controllerMap.put("/account/balance", new AccountBalanceController(webResourcesPath));
         controllerMap.put("/inquiry/real_name", new AccountRealNameController(webResourcesPath));
     }
@@ -36,40 +37,29 @@ public class DispatcherServlet extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         controller = controllerMap.get(request.getServletPath());
 
+        String requestMethod = request.getMethod();
+
         if (controller == null) {
-            resultView = getErrorViewPath(request, "O0007",
-                    "API를 요청 또는 처리할 수 없습니다. (API 업무처리 Routing 실패 시)");
-
-            forwardToView(request, response);
-        } else if (controller.getMethod().equals("GET")) {
-            doGet(request, response);
-        } else if (controller.getMethod().equals("POST")){
-            doPost(request,response);
-        } else {
+            resultView = getErrorViewPath(request, "O0007", "API를 요청 또는 처리할 수 없습니다. (API 업무처리 Routing 실패 시)");
+        } else if (!requestMethod.equals(controller.getMethod())) {
             resultView = getErrorViewPath(request, "O0010", "허용되지 않은 HTTP Method 입니다.");
-
-            forwardToView(request, response);
+        } else if (requestMethod.equals("GET")) {
+            doGet(request, response);
+        } else {
+            doPost(request, response);
         }
+
+        forwardToView(request, response);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (!controller.getMethod().equals(request.getMethod())) {
-            resultView = getErrorViewPath(request, "O0010", "허용되지 않은 HTTP Method 입니다.");
-        } else {
-            resultView = controller.processRequest(request, response);
-        }
-        forwardToView(request, response);
+        resultView = controller.processRequest(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (!controller.getMethod().equals(request.getMethod())) {
-            resultView = getErrorViewPath(request, "O0010", "허용되지 않은 HTTP Method 입니다.");
-        } else {
-            resultView = controller.processRequest(request, response);
-        }
-        forwardToView(request, response);
+        resultView = controller.processRequest(request, response);
     }
 
     private void forwardToView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

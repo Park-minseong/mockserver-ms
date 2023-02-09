@@ -6,17 +6,11 @@ import com.fourvaluesoft.mock.openbanking.account.realname.domain.AccountRealNam
 import com.fourvaluesoft.mock.openbanking.account.realname.service.AccountRealNameService;
 import com.fourvaluesoft.mock.openbanking.account.realname.service.impl.AccountRealNameServiceImpl;
 import com.fourvaluesoft.mock.openbanking.controller.Controller;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
 public class AccountRealNameController extends Controller {
 
@@ -28,7 +22,7 @@ public class AccountRealNameController extends Controller {
 
     public String processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String accountNum = getKeyValueFromBody(request);
+            String accountNum = getKeyValueFromBody(request, "account_num");
 
             AccountRealName accountRealName = realNameService.getRealName(accountNum);
 
@@ -49,16 +43,6 @@ public class AccountRealNameController extends Controller {
     @Override
     public String getMethod() {
         return "POST";
-    }
-
-    private String getKeyValueFromBody(HttpServletRequest request) throws IOException, BadRequestException {
-        try (InputStreamReader reader = new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8)) {
-            JsonElement accountNumJson = new Gson().fromJson(reader, JsonObject.class).get("account_num");
-            
-            return accountNumJson.getAsString();
-        } catch (NullPointerException | JsonSyntaxException ex) {
-            throw createBadRequestException("Invalid request body");
-        }
     }
 
     @Override

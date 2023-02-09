@@ -19,8 +19,14 @@ public class AccountBalanceController extends Controller {
         accountBalanceService = new AccountBalanceServiceImpl(webResourcesPath);
     }
 
+    @Override
+    public String getMethod() {
+        return "GET";
+    }
+
+    @Override
     public String processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String tranDtime = getKeyValue(request);
+        String tranDtime = getKeyValue(request, "tran_dtime");
 
         try {
             AccountBalance accountBalance = accountBalanceService.getBalance(tranDtime);
@@ -34,17 +40,8 @@ public class AccountBalanceController extends Controller {
         }
     }
 
-    private String getKeyValue(HttpServletRequest request) {
-        return request.getParameter("tran_dtime");
-    }
-
     @Override
     protected String getSucceedViewPath() {
         return "balance/showAccountBalance.jsp";
-    }
-
-    @Override
-    public String getMethod() {
-        return "GET";
     }
 }

@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 
 public class AccountRealNameServiceImpl implements AccountRealNameService {
 
-    private static final String DATA_PATH = "/WEB-INF/data/inquiry/realName/";
+    private static final String DATA_PATH = "/WEB-INF/data/inquiry/real_name/";
 
     private final String webResourcesPath;
 

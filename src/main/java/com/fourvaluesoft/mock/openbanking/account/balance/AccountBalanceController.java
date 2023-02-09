@@ -4,14 +4,14 @@ import com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.AccountBalanceService;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.impl.AccountBalanceServiceImpl;
 import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
-import com.fourvaluesoft.mock.openbanking.controller.Controller;
+import com.fourvaluesoft.mock.openbanking.controller.AccountController;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AccountBalanceController extends Controller {
+public class AccountBalanceController extends AccountController {
 
     private final AccountBalanceService accountBalanceService;
 
@@ -41,7 +41,7 @@ public class AccountBalanceController extends Controller {
     }
 
     @Override
-    protected String getSucceedViewPath() {
+    public String getSucceedViewPath() {
         return "balance/showAccountBalance.jsp";
     }
 }

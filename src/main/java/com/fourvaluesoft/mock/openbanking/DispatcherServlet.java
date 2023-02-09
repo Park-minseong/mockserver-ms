@@ -1,9 +1,10 @@
 package com.fourvaluesoft.mock.openbanking;
 
-import com.fourvaluesoft.mock.openbanking.account.balance.AccountBalanceController;
 import com.fourvaluesoft.mock.openbanking.account.realname.AccountRealNameController;
 import com.fourvaluesoft.mock.openbanking.common.ErrorResponse;
 import com.fourvaluesoft.mock.openbanking.controller.Controller;
+import com.fourvaluesoft.mock.openbanking.filedata.controller.HttpParameterFileDataController;
+import com.fourvaluesoft.mock.openbanking.filedata.controller.JsonRequestFileDataController;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,8 +26,10 @@ public class DispatcherServlet extends HttpServlet {
     public void init() throws ServletException {
         String webResourcesPath = getServletContext().getRealPath("/");
 
-        controllerMap.put("/account/balance", new AccountBalanceController(webResourcesPath));
-        controllerMap.put("/inquiry/real_name", new AccountRealNameController(webResourcesPath));
+//        controllerMap.put("/account/balance", new AccountBalanceController(webResourcesPath));
+        controllerMap.put("/account/balance", new HttpParameterFileDataController(webResourcesPath, "/account/balance/", "tran_dtime"));
+//        controllerMap.put("/inquiry/real_name", new AccountRealNameController(webResourcesPath));
+        controllerMap.put("/inquiry/real_name", new JsonRequestFileDataController(webResourcesPath, "/inquiry/real_name/", "account_num"));
     }
 
     @Override
@@ -47,6 +50,7 @@ public class DispatcherServlet extends HttpServlet {
     private void forwardToErrorView(HttpServletRequest request, HttpServletResponse response, String rspCode, String rspMessage)
             throws ServletException, IOException {
         String viewPath = getErrorViewPath(request, rspCode, rspMessage);
+
         forwardToView(request, response, viewPath);
     }
 

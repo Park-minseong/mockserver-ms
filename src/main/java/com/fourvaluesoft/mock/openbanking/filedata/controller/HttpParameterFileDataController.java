@@ -32,8 +32,7 @@ public class HttpParameterFileDataController extends FileDataController {
 
     @Override
     public String processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String keyValue = getKeyValue(request, keyName);
-        String filename = getFilename(keyValue);
+        String filename = getFilename(request, keyName);
 
         try {
             JsonObject resultJson = fileDataService.loadData(filename, requestUri);
@@ -48,7 +47,7 @@ public class HttpParameterFileDataController extends FileDataController {
         }
     }
 
-    private String getFilename(String keyValue) {
-        return keyValue + ".json";
+    private String getFilename(HttpServletRequest request, String keyName) {
+        return getKeyValue(request, keyName) + ".json";
     }
 }

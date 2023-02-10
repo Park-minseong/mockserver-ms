@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 
 public abstract class FileDataController implements Controller{
 
-    public static final String SUCCEED_VIEW = "/common/result.jsp";
+    protected static final String SUCCEED_VIEW = "/common/result.jsp";
     protected static final String ERROR_VIEW = "/common/error.jsp";
 
     protected String method;
@@ -24,12 +24,8 @@ public abstract class FileDataController implements Controller{
         return method;
     }
 
-    protected ErrorResponse createErrorResponse(String rspCode, String rspMessage) {
-        return new ErrorResponse(rspCode, rspMessage);
-    }
-
-    protected BadRequestException createBadRequestException(String message) {
-        return new BadRequestException(message);
+    protected String getKeyValue(HttpServletRequest request, String keyName) {
+        return request.getParameter(keyName);
     }
 
     protected String getKeyValueFromBody(HttpServletRequest request, String keyName) throws IOException, BadRequestException {
@@ -42,7 +38,11 @@ public abstract class FileDataController implements Controller{
         }
     }
 
-    protected String getKeyValue(HttpServletRequest request, String keyName) {
-        return request.getParameter(keyName);
+    protected ErrorResponse createErrorResponse(String rspCode, String rspMessage) {
+        return new ErrorResponse(rspCode, rspMessage);
+    }
+
+    protected BadRequestException createBadRequestException(String message) {
+        return new BadRequestException(message);
     }
 }

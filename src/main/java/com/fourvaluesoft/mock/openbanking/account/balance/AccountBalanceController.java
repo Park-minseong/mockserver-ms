@@ -31,7 +31,7 @@ public class AccountBalanceController extends AccountController {
         } catch (DataNotFoundException exception) {
             request.setAttribute("error", createErrorResponse("A0021", "데이터 없음"));
 
-            return getErrorViewPath();
+            return ERROR_VIEW;
         }
     }
 

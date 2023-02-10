@@ -14,6 +14,8 @@ import java.nio.charset.StandardCharsets;
 
 public abstract class AccountController implements Controller{
 
+    protected static final String ERROR_VIEW = "/common/error.jsp";
+
     protected String method;
 
     protected abstract String getSucceedViewPath();
@@ -23,16 +25,8 @@ public abstract class AccountController implements Controller{
         return method;
     }
 
-    protected String getErrorViewPath() {
-        return "/common/error.jsp";
-    }
-
-    protected ErrorResponse createErrorResponse(String rspCode, String rspMessage) {
-        return new ErrorResponse(rspCode, rspMessage);
-    }
-
-    protected BadRequestException createBadRequestException(String message) {
-        return new BadRequestException(message);
+    protected String getKeyValue(HttpServletRequest request, String keyName) {
+        return request.getParameter(keyName);
     }
 
     protected String getKeyValueFromBody(HttpServletRequest request, String keyName) throws IOException, BadRequestException {
@@ -45,7 +39,11 @@ public abstract class AccountController implements Controller{
         }
     }
 
-    protected String getKeyValue(HttpServletRequest request, String keyName) {
-        return request.getParameter(keyName);
+    protected ErrorResponse createErrorResponse(String rspCode, String rspMessage) {
+        return new ErrorResponse(rspCode, rspMessage);
+    }
+
+    protected BadRequestException createBadRequestException(String message) {
+        return new BadRequestException(message);
     }
 }

@@ -33,11 +33,11 @@ public class AccountRealNameController extends AccountController {
         } catch (BadRequestException ex) {
             request.setAttribute("error", createErrorResponse("A0003", "요청전문 포맷 에러"));
 
-            return getErrorViewPath();
+            return ERROR_VIEW;
         } catch (DataNotFoundException ex) {
             request.setAttribute("error", createErrorResponse("A0021", "데이터 없음"));
 
-            return getErrorViewPath();
+            return ERROR_VIEW;
         }
     }
 

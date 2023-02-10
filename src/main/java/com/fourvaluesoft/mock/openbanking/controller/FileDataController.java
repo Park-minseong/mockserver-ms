@@ -1,6 +1,6 @@
 package com.fourvaluesoft.mock.openbanking.controller;
 
-import com.fourvaluesoft.mock.openbanking.account.exception.BadRequestException;
+import com.fourvaluesoft.mock.openbanking.exception.BadRequestException;
 import com.fourvaluesoft.mock.openbanking.common.ErrorResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;

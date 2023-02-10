@@ -1,12 +1,11 @@
 package com.fourvaluesoft.mock.openbanking.filedata.controller;
 
-import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
+import com.fourvaluesoft.mock.openbanking.exception.DataNotFoundException;
 import com.fourvaluesoft.mock.openbanking.controller.FileDataController;
 import com.fourvaluesoft.mock.openbanking.filedata.service.FileDataService;
 import com.fourvaluesoft.mock.openbanking.filedata.service.impl.FileDataServiceImpl;
 import com.google.gson.JsonObject;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,9 +31,9 @@ public class HttpParameterFileDataController extends FileDataController {
     }
 
     @Override
-    public String processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String keyValue = getKeyValue(request, keyName);
-        String filename = keyValue + ".json";
+        String filename = getFilename(keyValue);
 
         try {
             JsonObject resultJson = fileDataService.loadData(filename, requestUri);
@@ -42,10 +41,14 @@ public class HttpParameterFileDataController extends FileDataController {
             request.setAttribute("data", resultJson);
 
             return SUCCEED_VIEW;
-        } catch (AccountNotFoundException ex) {
+        } catch (DataNotFoundException ex) {
             request.setAttribute("error", createErrorResponse("A0021", "데이터 없음"));
 
             return ERROR_VIEW;
         }
+    }
+
+    private String getFilename(String keyValue) {
+        return keyValue + ".json";
     }
 }

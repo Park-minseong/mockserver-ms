@@ -1,6 +1,6 @@
 package com.fourvaluesoft.mock.openbanking.filedata.service.impl;
 
-import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
+import com.fourvaluesoft.mock.openbanking.exception.DataNotFoundException;
 import com.fourvaluesoft.mock.openbanking.filedata.service.FileDataService;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -23,13 +23,13 @@ public class FileDataServiceImpl implements FileDataService {
     }
 
     @Override
-    public JsonObject loadData(String filename, String requestUri) throws AccountNotFoundException {
+    public JsonObject loadData(String filename, String requestUri) throws DataNotFoundException {
         String dataFilePath = getDataFilePath(filename, requestUri);
 
         try {
             return loadFromFile(dataFilePath);
         } catch (IOException | JsonIOException | JsonSyntaxException ex) {
-            throw createAccountNotFoundException(filename);
+            throw createDataNotFoundException(filename);
         }
     }
 
@@ -45,7 +45,7 @@ public class FileDataServiceImpl implements FileDataService {
         return webResourcesPath + dataPath + requestUri + filename;
     }
 
-    private AccountNotFoundException createAccountNotFoundException(String filename) {
-        return new AccountNotFoundException("Invalid filename: " + filename);
+    private DataNotFoundException createDataNotFoundException(String filename) {
+        return new DataNotFoundException("Invalid filename: " + filename);
     }
 }

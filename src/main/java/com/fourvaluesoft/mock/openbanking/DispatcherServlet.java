@@ -1,9 +1,9 @@
 package com.fourvaluesoft.mock.openbanking;
 
-import com.fourvaluesoft.mock.openbanking.account.realname.AccountRealNameController;
 import com.fourvaluesoft.mock.openbanking.common.ErrorResponse;
 import com.fourvaluesoft.mock.openbanking.controller.Controller;
 import com.fourvaluesoft.mock.openbanking.filedata.controller.HttpParameterFileDataController;
+import com.fourvaluesoft.mock.openbanking.filedata.controller.JsonRequestFileDataController;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,8 +28,8 @@ public class DispatcherServlet extends HttpServlet {
 
 //        controllerMap.put("/account/balance", new AccountBalanceController(webResourcesPath));
         controllerMap.put("/account/balance", new HttpParameterFileDataController(webResourcesPath, "/account/balance/", "tran_dtime"));
-        controllerMap.put("/inquiry/real_name", new AccountRealNameController(webResourcesPath));
-//        controllerMap.put("/inquiry/real_name", new JsonRequestFileDataController(webResourcesPath, "/inquiry/real_name/", "account_num"));
+//        controllerMap.put("/inquiry/real_name", new AccountRealNameController(webResourcesPath));
+        controllerMap.put("/inquiry/real_name", new JsonRequestFileDataController(webResourcesPath, "/inquiry/real_name/", "account_num"));
     }
 
     @Override

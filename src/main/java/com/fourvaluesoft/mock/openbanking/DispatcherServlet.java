@@ -27,9 +27,11 @@ public class DispatcherServlet extends HttpServlet {
         String webResourcesPath = getServletContext().getRealPath("/");
 
 //        controllerMap.put("/account/balance", new AccountBalanceController(webResourcesPath));
-        controllerMap.put("/account/balance", new HttpParameterFileDataController(webResourcesPath, "/account/balance/", "tran_dtime"));
+        controllerMap.put("/account/balance",
+                new HttpParameterFileDataController(webResourcesPath, "/account/balance/", "tran_dtime"));
 //        controllerMap.put("/inquiry/real_name", new AccountRealNameController(webResourcesPath));
-        controllerMap.put("/inquiry/real_name", new JsonRequestFileDataController(webResourcesPath, "/inquiry/real_name/", "account_num"));
+        controllerMap.put("/inquiry/real_name",
+                new JsonRequestFileDataController(webResourcesPath, "/inquiry/real_name/", "account_num"));
     }
 
     @Override
@@ -39,13 +41,15 @@ public class DispatcherServlet extends HttpServlet {
         String requestMethod = request.getMethod();
 
         if (controller == null) {
-            request.setAttribute("error", new ErrorResponse("O0007","API를 요청 또는 처리할 수 없습니다. (API 업무처리 Routing 실패 시)"));
+            request.setAttribute("error", new ErrorResponse("O0007",
+                    "API를 요청 또는 처리할 수 없습니다. (API 업무처리 Routing 실패 시)"));
 
             forwardToErrorView(request, response);
         } else if (requestMethod.equals(controller.getMethod())) {
             forwardToView(request, response, controller.processRequest(request, response));
         } else {
-            request.setAttribute("error", new ErrorResponse("O0010", "허용되지 않은 HTTP Method 입니다."));
+            request.setAttribute("error", new ErrorResponse("O0010",
+                    "허용되지 않은 HTTP Method 입니다."));
 
             forwardToErrorView(request, response);
         }
@@ -56,7 +60,8 @@ public class DispatcherServlet extends HttpServlet {
         forwardToView(request, response, ERROR_VIEW);
     }
 
-    private void forwardToView(HttpServletRequest request, HttpServletResponse response, String viewPath) throws ServletException, IOException {
+    private void forwardToView(HttpServletRequest request, HttpServletResponse response, String viewPath)
+            throws ServletException, IOException {
         request.getRequestDispatcher(VIEWS_PATH + viewPath).forward(request, response);
     }
 }

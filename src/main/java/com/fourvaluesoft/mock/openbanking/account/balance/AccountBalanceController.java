@@ -20,11 +20,6 @@ public class AccountBalanceController extends AccountController {
     }
 
     @Override
-    public String getMethod() {
-        return method;
-    }
-
-    @Override
     public String processRequest(HttpServletRequest request, HttpServletResponse response) {
         String tranDtime = getKeyValue(request, "tran_dtime");
 

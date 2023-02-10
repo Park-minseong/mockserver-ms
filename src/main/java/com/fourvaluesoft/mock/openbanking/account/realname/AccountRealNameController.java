@@ -13,7 +13,6 @@ import java.io.IOException;
 
 public class AccountRealNameController extends AccountController {
 
-
     private final AccountRealNameService realNameService;
 
     public AccountRealNameController(String webResourcesPath) {
@@ -40,11 +39,6 @@ public class AccountRealNameController extends AccountController {
 
             return getErrorViewPath();
         }
-    }
-
-    @Override
-    public String getMethod() {
-        return method;
     }
 
     @Override

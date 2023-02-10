@@ -26,11 +26,6 @@ public class HttpParameterFileDataController extends FileDataController {
     }
 
     @Override
-    public String getMethod() {
-        return method;
-    }
-
-    @Override
     public String processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String filename = getFilename(request, keyName);
 

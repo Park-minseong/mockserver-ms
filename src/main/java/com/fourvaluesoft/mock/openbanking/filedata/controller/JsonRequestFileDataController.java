@@ -27,11 +27,6 @@ public class JsonRequestFileDataController extends FileDataController {
     }
 
     @Override
-    public String getMethod() {
-        return method;
-    }
-
-    @Override
     public String processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String filename = getFilename(request, keyName);

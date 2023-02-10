@@ -14,8 +14,17 @@ import java.nio.charset.StandardCharsets;
 
 public abstract class AccountController implements Controller{
 
+    protected String method;
+
+    protected abstract String getSucceedViewPath();
+
+    @Override
+    public String getMethod() {
+        return method;
+    }
+
     protected String getErrorViewPath() {
-        return "common/error.jsp";
+        return "/common/error.jsp";
     }
 
     protected ErrorResponse createErrorResponse(String rspCode, String rspMessage) {

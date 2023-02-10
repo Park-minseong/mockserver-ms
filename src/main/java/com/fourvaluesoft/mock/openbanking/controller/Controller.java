@@ -7,9 +7,7 @@ import java.io.IOException;
 
 public interface Controller {
 
-    abstract String getMethod();
+    String getMethod();
 
-    abstract String processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
-
-    abstract String getSucceedViewPath();
+    String processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 }

@@ -14,8 +14,14 @@ import java.nio.charset.StandardCharsets;
 
 public abstract class FileDataController implements Controller{
 
-    protected String getErrorViewPath() {
-        return "common/error.jsp";
+    public static final String SUCCEED_VIEW = "/common/result.jsp";
+    protected static final String ERROR_VIEW = "/common/error.jsp";
+
+    protected String method;
+
+    @Override
+    public String getMethod() {
+        return method;
     }
 
     protected ErrorResponse createErrorResponse(String rspCode, String rspMessage) {

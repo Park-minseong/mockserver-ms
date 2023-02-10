@@ -14,9 +14,12 @@ import java.io.IOException;
 
 public class AccountRealNameController extends AccountController {
 
+
     private final AccountRealNameService realNameService;
 
     public AccountRealNameController(String webResourcesPath) throws ServletException {
+        this.method = "POST";
+
         realNameService = new AccountRealNameServiceImpl(webResourcesPath);
     }
 
@@ -42,11 +45,11 @@ public class AccountRealNameController extends AccountController {
 
     @Override
     public String getMethod() {
-        return "POST";
+        return method;
     }
 
     @Override
-    public String getSucceedViewPath() {
-        return "realName/showAccountRealName.jsp";
+    protected String getSucceedViewPath() {
+        return "/realName/showAccountRealName.jsp";
     }
 }

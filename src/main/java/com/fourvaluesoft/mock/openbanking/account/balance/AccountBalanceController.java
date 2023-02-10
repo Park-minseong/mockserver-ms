@@ -16,12 +16,14 @@ public class AccountBalanceController extends AccountController {
     private final AccountBalanceService accountBalanceService;
 
     public AccountBalanceController(String webResourcesPath) throws ServletException {
+        this.method = "GET";
+
         accountBalanceService = new AccountBalanceServiceImpl(webResourcesPath);
     }
 
     @Override
     public String getMethod() {
-        return "GET";
+        return method;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class AccountBalanceController extends AccountController {
     }
 
     @Override
-    public String getSucceedViewPath() {
-        return "balance/showAccountBalance.jsp";
+    protected String getSucceedViewPath() {
+        return "/balance/showAccountBalance.jsp";
     }
 }

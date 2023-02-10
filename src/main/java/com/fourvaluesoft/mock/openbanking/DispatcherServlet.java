@@ -4,7 +4,6 @@ import com.fourvaluesoft.mock.openbanking.account.realname.AccountRealNameContro
 import com.fourvaluesoft.mock.openbanking.common.ErrorResponse;
 import com.fourvaluesoft.mock.openbanking.controller.Controller;
 import com.fourvaluesoft.mock.openbanking.filedata.controller.HttpParameterFileDataController;
-import com.fourvaluesoft.mock.openbanking.filedata.controller.JsonRequestFileDataController;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +17,8 @@ import java.util.Map;
 @WebServlet(name = "DispatcherServlet", value = "/")
 public class DispatcherServlet extends HttpServlet {
 
-    private static final String VIEWS_PATH = "/WEB-INF/views/";
+    private static final String VIEWS_PATH = "/WEB-INF/views";
+    private static final String ERROR_VIEW = "/common/error.jsp";
 
     private final Map<String, Controller> controllerMap = new HashMap<String, Controller>();
 
@@ -28,8 +28,8 @@ public class DispatcherServlet extends HttpServlet {
 
 //        controllerMap.put("/account/balance", new AccountBalanceController(webResourcesPath));
         controllerMap.put("/account/balance", new HttpParameterFileDataController(webResourcesPath, "/account/balance/", "tran_dtime"));
-//        controllerMap.put("/inquiry/real_name", new AccountRealNameController(webResourcesPath));
-        controllerMap.put("/inquiry/real_name", new JsonRequestFileDataController(webResourcesPath, "/inquiry/real_name/", "account_num"));
+        controllerMap.put("/inquiry/real_name", new AccountRealNameController(webResourcesPath));
+//        controllerMap.put("/inquiry/real_name", new JsonRequestFileDataController(webResourcesPath, "/inquiry/real_name/", "account_num"));
     }
 
     @Override
@@ -61,6 +61,6 @@ public class DispatcherServlet extends HttpServlet {
     private String getErrorViewPath(HttpServletRequest request, String rspCode, String rspMessage) {
         request.setAttribute("error", new ErrorResponse(rspCode, rspMessage));
 
-        return "common/error.jsp";
+        return ERROR_VIEW;
     }
 }

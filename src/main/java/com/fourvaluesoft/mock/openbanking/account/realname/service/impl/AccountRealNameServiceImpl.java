@@ -1,6 +1,6 @@
 package com.fourvaluesoft.mock.openbanking.account.realname.service.impl;
 
-import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
+import com.fourvaluesoft.mock.openbanking.exception.DataNotFoundException;
 import com.fourvaluesoft.mock.openbanking.account.realname.domain.AccountRealName;
 import com.fourvaluesoft.mock.openbanking.account.realname.service.AccountRealNameService;
 import com.google.gson.*;
@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 
 public class AccountRealNameServiceImpl implements AccountRealNameService {
 
-    private static final String DATA_PATH = "/WEB-INF/data/inquiry/realName/";
+    private static final String DATA_PATH = "/WEB-INF/data/inquiry/real_name/";
 
     private final String webResourcesPath;
 
@@ -22,13 +22,13 @@ public class AccountRealNameServiceImpl implements AccountRealNameService {
     }
 
     @Override
-    public AccountRealName getRealName(String accountNum) throws AccountNotFoundException {
+    public AccountRealName getRealName(String accountNum) throws DataNotFoundException {
         String dataFilePath = getDataFilePath(accountNum);
 
         try {
             return loadFromFile(dataFilePath);
         } catch (IOException | JsonIOException | JsonSyntaxException ex) {
-            throw createAccountNotFoundException(accountNum);
+            throw createDataNotFoundException(accountNum);
         }
     }
 
@@ -44,7 +44,7 @@ public class AccountRealNameServiceImpl implements AccountRealNameService {
         return webResourcesPath + DATA_PATH + accountNum + ".json";
     }
 
-    private AccountNotFoundException createAccountNotFoundException(String accountNum) {
-        return new AccountNotFoundException("Invalid accountNum: " + accountNum);
+    private DataNotFoundException createDataNotFoundException(String accountNum) {
+        return new DataNotFoundException("Invalid accountNum: " + accountNum);
     }
 }

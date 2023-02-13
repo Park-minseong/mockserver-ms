@@ -1,48 +1,76 @@
 package com.fourvaluesoft.mock.openbanking.controller;
 
 import com.fourvaluesoft.mock.openbanking.exception.BadRequestException;
-import com.fourvaluesoft.mock.openbanking.common.ErrorResponse;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
+import com.fourvaluesoft.mock.openbanking.exception.DataNotFoundException;
+import com.fourvaluesoft.mock.openbanking.filedata.service.FileDataService;
+import com.fourvaluesoft.mock.openbanking.filedata.service.impl.FileDataServiceImpl;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
-public abstract class FileDataController implements Controller{
+public abstract class FileDataController extends KeyValueController {
 
-    protected static final String SUCCEED_VIEW = "/common/result.jsp";
-    protected static final String ERROR_VIEW = "/common/error.jsp";
+    private static final String SUCCEED_VIEW = "/common/result.jsp";
 
-    protected String method;
+    private final String requestUri;
+    private final String keyName;
+    private final String webResourcesPath;
+    private final String dataPath = "/WEB-INF/data";
+
+    private final FileDataService fileDataService;
+
+    public FileDataController(String webResourcesPath, String method, String requestUri, String keyName) {
+        this.webResourcesPath = webResourcesPath;
+        this.method = method;
+        this.requestUri = requestUri;
+        this.keyName = keyName;
+
+        this.fileDataService = new FileDataServiceImpl();
+    }
+
+    protected String getWebResourcesPath() {
+        return webResourcesPath;
+    }
+
+    protected String getDataPath() {
+        return dataPath;
+    }
+
+    protected String getRequestUri() {
+        return requestUri;
+    }
+
+    protected String getKeyName() {
+        return keyName;
+    }
 
     @Override
-    public String getMethod() {
-        return method;
+    protected String getSucceedViewPath() {
+        return SUCCEED_VIEW;
     }
 
-    protected String getKeyValue(HttpServletRequest request, String keyName) {
-        return request.getParameter(keyName);
-    }
+    @Override
+    public String processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String filename = getFilename(request, keyName);
 
-    protected String getKeyValueFromBody(HttpServletRequest request, String keyName) throws IOException, BadRequestException {
-        try (InputStreamReader reader = new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8)) {
-            JsonElement accountNumJson = new Gson().fromJson(reader, JsonObject.class).get(keyName);
+            JsonObject dataJsonObject = fileDataService.loadData(filename);
 
-            return accountNumJson.getAsString();
-        } catch (NullPointerException | JsonSyntaxException ex) {
-            throw createBadRequestException("Invalid request body");
+            request.setAttribute("data", dataJsonObject);
+
+            return getSucceedViewPath();
+        } catch (BadRequestException ex) {
+            request.setAttribute("error", createErrorResponse("A0003", "요청전문 포맷 에러"));
+
+            return getErrorView();
+        } catch (DataNotFoundException ex) {
+            request.setAttribute("error", createErrorResponse("A0021", "데이터 없음"));
+
+            return getErrorView();
         }
     }
 
-    protected ErrorResponse createErrorResponse(String rspCode, String rspMessage) {
-        return new ErrorResponse(rspCode, rspMessage);
-    }
-
-    protected BadRequestException createBadRequestException(String message) {
-        return new BadRequestException(message);
-    }
+    protected abstract String getFilename(HttpServletRequest request, String keyName) throws IOException;
 }

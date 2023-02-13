@@ -15,19 +15,11 @@ import java.nio.file.Paths;
 
 public class FileDataServiceImpl implements FileDataService {
 
-    private final String webResourcesPath;
-    private final String dataPath = "/WEB-INF/data";
-
-    public FileDataServiceImpl(String webResourcesPath) {
-        this.webResourcesPath = webResourcesPath;
-    }
-
     @Override
-    public JsonObject loadData(String filename, String requestUri) throws DataNotFoundException {
-        String dataFilePath = getDataFilePath(filename, requestUri);
+    public JsonObject loadData(String filename) throws DataNotFoundException {
 
         try {
-            return loadFromFile(dataFilePath);
+            return loadFromFile(filename);
         } catch (IOException | JsonIOException | JsonSyntaxException ex) {
             throw createDataNotFoundException(filename);
         }
@@ -39,10 +31,6 @@ public class FileDataServiceImpl implements FileDataService {
 
             return gson.fromJson(reader, JsonObject.class);
         }
-    }
-
-    private String getDataFilePath(String filename, String requestUri) {
-        return webResourcesPath + dataPath + requestUri + filename;
     }
 
     private DataNotFoundException createDataNotFoundException(String filename) {

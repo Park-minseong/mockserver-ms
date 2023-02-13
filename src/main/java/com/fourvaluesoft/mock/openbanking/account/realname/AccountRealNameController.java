@@ -3,7 +3,7 @@ package com.fourvaluesoft.mock.openbanking.account.realname;
 import com.fourvaluesoft.mock.openbanking.account.realname.domain.AccountRealName;
 import com.fourvaluesoft.mock.openbanking.account.realname.service.AccountRealNameService;
 import com.fourvaluesoft.mock.openbanking.account.realname.service.impl.AccountRealNameServiceImpl;
-import com.fourvaluesoft.mock.openbanking.controller.AccountController;
+import com.fourvaluesoft.mock.openbanking.controller.KeyValueController;
 import com.fourvaluesoft.mock.openbanking.exception.BadRequestException;
 import com.fourvaluesoft.mock.openbanking.exception.DataNotFoundException;
 
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AccountRealNameController extends AccountController {
+public class AccountRealNameController extends KeyValueController {
 
     private final AccountRealNameService realNameService;
 

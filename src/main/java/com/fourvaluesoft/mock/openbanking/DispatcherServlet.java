@@ -41,27 +41,31 @@ public class DispatcherServlet extends HttpServlet {
         String requestMethod = request.getMethod();
 
         if (controller == null) {
-            request.setAttribute("error", new ErrorResponse("O0007",
-                    "API를 요청 또는 처리할 수 없습니다. (API 업무처리 Routing 실패 시)"));
+            String rspCode = "O0007";
+            String rspMessage = "API를 요청 또는 처리할 수 없습니다. (API 업무처리 Routing 실패 시)";
+
+            request.setAttribute("error", new ErrorResponse(rspCode, rspMessage));
 
             forwardToErrorView(request, response);
         } else if (requestMethod.equals(controller.getMethod())) {
             forwardToView(request, response, controller.processRequest(request, response));
         } else {
-            request.setAttribute("error", new ErrorResponse("O0010",
-                    "허용되지 않은 HTTP Method 입니다."));
+            String rspCode = "O0010";
+            String rspMessage = "허용되지 않은 HTTP Method 입니다.";
+
+            request.setAttribute("error", new ErrorResponse(rspCode, rspMessage));
 
             forwardToErrorView(request, response);
         }
     }
 
-    private void forwardToErrorView(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        forwardToView(request, response, ERROR_VIEW);
-    }
-
     private void forwardToView(HttpServletRequest request, HttpServletResponse response, String viewPath)
             throws ServletException, IOException {
         request.getRequestDispatcher(VIEWS_PATH + viewPath).forward(request, response);
+    }
+
+    private void forwardToErrorView(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        forwardToView(request, response, ERROR_VIEW);
     }
 }

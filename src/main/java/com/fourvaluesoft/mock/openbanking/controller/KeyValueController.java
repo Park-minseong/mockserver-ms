@@ -12,28 +12,32 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-public abstract class AccountController implements Controller{
+public abstract class KeyValueController implements Controller {
 
     protected static final String ERROR_VIEW = "/common/error.jsp";
 
     protected String method;
-
-    protected abstract String getSucceedViewPath();
 
     @Override
     public String getMethod() {
         return method;
     }
 
-    protected String getKeyValue(HttpServletRequest request, String keyName) {
+    protected abstract String getSucceedViewPath();
+
+    protected String getErrorView() {
+        return ERROR_VIEW;
+    }
+
+    protected String getKeyValueFromParameter(HttpServletRequest request, String keyName) {
         return request.getParameter(keyName);
     }
 
     protected String getKeyValueFromBody(HttpServletRequest request, String keyName) throws IOException, BadRequestException {
         try (InputStreamReader reader = new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8)) {
-            JsonElement accountNumJson = new Gson().fromJson(reader, JsonObject.class).get(keyName);
+            JsonElement jsonElement = new Gson().fromJson(reader, JsonObject.class).get(keyName);
 
-            return accountNumJson.getAsString();
+            return jsonElement.getAsString();
         } catch (NullPointerException | JsonSyntaxException ex) {
             throw createBadRequestException("Invalid request body");
         }

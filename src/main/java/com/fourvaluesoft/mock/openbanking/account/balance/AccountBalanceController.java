@@ -3,13 +3,13 @@ package com.fourvaluesoft.mock.openbanking.account.balance;
 import com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.AccountBalanceService;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.impl.AccountBalanceServiceImpl;
-import com.fourvaluesoft.mock.openbanking.controller.AccountController;
+import com.fourvaluesoft.mock.openbanking.controller.KeyValueController;
 import com.fourvaluesoft.mock.openbanking.exception.DataNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AccountBalanceController extends AccountController {
+public class AccountBalanceController extends KeyValueController {
 
     private final AccountBalanceService accountBalanceService;
 
@@ -21,7 +21,7 @@ public class AccountBalanceController extends AccountController {
 
     @Override
     public String processRequest(HttpServletRequest request, HttpServletResponse response) {
-        String tranDtime = getKeyValue(request, "tran_dtime");
+        String tranDtime = getKeyValueFromParameter(request, "tran_dtime");
 
         try {
             AccountBalance accountBalance = accountBalanceService.getBalance(tranDtime);

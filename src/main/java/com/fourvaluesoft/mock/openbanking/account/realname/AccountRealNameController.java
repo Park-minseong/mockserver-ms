@@ -1,26 +1,27 @@
 package com.fourvaluesoft.mock.openbanking.account.realname;
 
-import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
-import com.fourvaluesoft.mock.openbanking.account.exception.BadRequestException;
 import com.fourvaluesoft.mock.openbanking.account.realname.domain.AccountRealName;
 import com.fourvaluesoft.mock.openbanking.account.realname.service.AccountRealNameService;
 import com.fourvaluesoft.mock.openbanking.account.realname.service.impl.AccountRealNameServiceImpl;
-import com.fourvaluesoft.mock.openbanking.controller.Controller;
+import com.fourvaluesoft.mock.openbanking.controller.KeyValueController;
+import com.fourvaluesoft.mock.openbanking.exception.BadRequestException;
+import com.fourvaluesoft.mock.openbanking.exception.DataNotFoundException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AccountRealNameController extends Controller {
+public class AccountRealNameController extends KeyValueController {
 
     private final AccountRealNameService realNameService;
 
-    public AccountRealNameController(String webResourcesPath) throws ServletException {
+    public AccountRealNameController(String webResourcesPath) {
+        this.method = "POST";
+
         realNameService = new AccountRealNameServiceImpl(webResourcesPath);
     }
 
-    public String processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String accountNum = getKeyValueFromBody(request, "account_num");
 
@@ -29,24 +30,19 @@ public class AccountRealNameController extends Controller {
             request.setAttribute("accountRealName", accountRealName);
 
             return getSucceedViewPath();
-        } catch (AccountNotFoundException ex) {
-            request.setAttribute("error", createErrorResponse("A0021", "데이터 없음"));
-
-            return getErrorViewPath();
         } catch (BadRequestException ex) {
             request.setAttribute("error", createErrorResponse("A0003", "요청전문 포맷 에러"));
 
-            return getErrorViewPath();
+            return ERROR_VIEW;
+        } catch (DataNotFoundException ex) {
+            request.setAttribute("error", createErrorResponse("A0021", "데이터 없음"));
+
+            return ERROR_VIEW;
         }
     }
 
     @Override
-    public String getMethod() {
-        return "POST";
-    }
-
-    @Override
     protected String getSucceedViewPath() {
-        return "realName/showAccountRealName.jsp";
+        return "/realName/showAccountRealName.jsp";
     }
 }

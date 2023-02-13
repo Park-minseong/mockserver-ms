@@ -2,7 +2,7 @@ package com.fourvaluesoft.mock.openbanking.account.balance.service.impl;
 
 import com.fourvaluesoft.mock.openbanking.account.balance.domain.AccountBalance;
 import com.fourvaluesoft.mock.openbanking.account.balance.service.AccountBalanceService;
-import com.fourvaluesoft.mock.openbanking.account.exception.AccountNotFoundException;
+import com.fourvaluesoft.mock.openbanking.exception.DataNotFoundException;
 import com.google.gson.*;
 
 import java.io.IOException;
@@ -22,13 +22,13 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
     }
 
     @Override
-    public AccountBalance getBalance(String tranDtime) throws AccountNotFoundException {
+    public AccountBalance getBalance(String tranDtime) throws DataNotFoundException {
         String dataFilePath = getDataFilePath(tranDtime);
 
         try {
             return loadFromFile(dataFilePath);
         } catch (IOException | JsonIOException | JsonSyntaxException ex) {
-            throw createAccountNotFoundException(tranDtime);
+            throw createDataNotFoundException(tranDtime);
         }
     }
 
@@ -44,7 +44,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
         return webResourcesPath + DATA_PATH + tranDtime + ".json";
     }
 
-    private AccountNotFoundException createAccountNotFoundException(String tranDtime) {
-        return new AccountNotFoundException("Invalid tranDtime: " + tranDtime);
+    private DataNotFoundException createDataNotFoundException(String tranDtime) {
+        return new DataNotFoundException("Invalid tranDtime: " + tranDtime);
     }
 }

@@ -1,4 +1,4 @@
-package com.fourvaluesoft.mock.openbanking.account.exception;
+package com.fourvaluesoft.mock.openbanking.exception;
 
 public class BadRequestException extends RuntimeException {
 
